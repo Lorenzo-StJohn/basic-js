@@ -1,32 +1,60 @@
-const { NotImplementedError } = require('../extensions/index.js');
+const { NotImplementedError } = require("../extensions/index.js");
 
 /**
  * Implement chainMaker object according to task description
- * 
+ *
  */
 const chainMaker = {
+  number: 0,
+  links: [],
   getLength() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    return this.number;
   },
-  addLink(/* value */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  addLink(value) {
+    this.links.push(value);
+    this.number += 1;
+    return this;
   },
-  removeLink(/* position */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  removeLink(position) {
+    if (
+      position % 1 !== 0 ||
+      typeof position !== "number" ||
+      position < 1 ||
+      position > this.number
+    ) {
+      this.number = 0;
+      this.links = [];
+      throw new Error("You can't remove incorrect link!");
+    } else {
+      for (let i = position - 1; i < this.number - 1; i += 1) {
+        this.links[i] = this.links[i + 1];
+      }
+      this.links.pop();
+      this.number -= 1;
+      return this;
+    }
   },
   reverseChain() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    let temp;
+    for (let i = 0; i * 2 < this.number; i += 1) {
+      temp = this.links[i];
+      this.links[i] = this.links[this.number - i - 1];
+      this.links[this.number - i - 1] = temp;
+    }
+    return this;
   },
   finishChain() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-  }
+    let ans = "";
+    for (let i = 0; i < this.number; i += 1) {
+      if (i > 0) ans += "~~";
+      ans += `( ${this.links[i]} )`;
+    }
+    this.number = 0;
+    this.links = [];
+    return ans;
+  },
 };
 
 module.exports = {
-  chainMaker
+  chainMaker,
 };
